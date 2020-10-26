@@ -45,13 +45,13 @@ def app_title():
     handle_frame = tk.Frame(core_frame, relief='raised')  # recreates the top bar
     handle_frame.pack(fill='x', expand=True)
 
-    # app_logo = PhotoImage(file='assets/img/logo.gif')
-    # app_logo = app_logo.zoom(8)  # resize the image
-    # app_logo = app_logo.subsample(32)  # resample the image
-    #
-    # handle_frame_logo = tk.Label(handle_frame, image=app_logo, relief='raised')
-    # handle_frame_logo.image = app_logo
-    # handle_frame_logo.pack(side='left', padx=2)
+    app_logo = PhotoImage(file='files/earth_moon_64x64.png')
+    app_logo = app_logo.zoom(8)  # resize the image
+    app_logo = app_logo.subsample(30)  # resample the image
+
+    handle_frame_logo = tk.Label(handle_frame, relief='raised', image=app_logo)
+    handle_frame_logo.image = app_logo
+    handle_frame_logo.pack(side='left', fill='y')
 
     app_title = tk.Label(handle_frame, text=" Fortune_teller ")
     app_title.pack(side='left', padx=2)
@@ -69,15 +69,24 @@ def menu():
     app_title()
     root.title('')
     menu_frame = tk.Frame(root)
-    menu_frame.pack(fill='both', expand=True)
-    buttons_frame = tk.Frame(menu_frame)
-    buttons_frame.pack()
+    menu_frame.pack(fill='both', expand=True, padx=5, pady=5)
+
+    bg_holder = tk.Frame(menu_frame)
+    bg_holder.place(anchor='c', relx=.5, rely=.5)
+
+    background_image = PhotoImage(file='files/bg.png')
+    bg_image = tk.Label(bg_holder, image=background_image)
+    bg_image.image = background_image
+    bg_image.pack()
+
+    buttons_frame = tk.Frame(menu_frame, relief='sunken')
+    buttons_frame.pack(padx=20, pady=75)
+
     button_moonology = tk.Button(buttons_frame, width=15, text='Moonology', command=moonology_page)
     button_moonology.grid(row=0, column=0)
+
     button_tarot = tk.Button(buttons_frame, width=15, text='Tarot', command=tarot_page)
-    button_tarot.grid(row=0, column=1)
-    # button_exit = tk.Button(buttons_frame, width=15, text='Exit', command=sys.exit)
-    # button_exit.grid(row=0, column=2)
+    button_tarot.grid(row=1, column=0)
 
 
 def moonology_page():
