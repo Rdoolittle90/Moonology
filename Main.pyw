@@ -39,7 +39,7 @@ def app_title():
     def move_window(event):
         root.geometry(f'+{event.x_root}+{event.y_root}')
 
-    core_frame = tk.Frame(root, relief='ridge', border=1)
+    core_frame = tk.Frame(root, relief='ridge', border=0)
     core_frame.pack(fill='x', expand=True)
 
     handle_frame = tk.Frame(core_frame, relief='raised')  # recreates the top bar
@@ -53,7 +53,7 @@ def app_title():
     # handle_frame_logo.image = app_logo
     # handle_frame_logo.pack(side='left', padx=2)
 
-    app_title = tk.Label(handle_frame, text=" App Title   ")
+    app_title = tk.Label(handle_frame, text=" Fortune_teller ")
     app_title.pack(side='left', padx=2)
 
     close_button = tk.Button(handle_frame, text='X', command=root.destroy)  # creates a button for the top bar to exit
@@ -76,8 +76,8 @@ def menu():
     button_moonology.grid(row=0, column=0)
     button_tarot = tk.Button(buttons_frame, width=15, text='Tarot', command=tarot_page)
     button_tarot.grid(row=0, column=1)
-    button_exit = tk.Button(buttons_frame, width=15, text='Exit', command=sys.exit)
-    button_exit.grid(row=0, column=2)
+    # button_exit = tk.Button(buttons_frame, width=15, text='Exit', command=sys.exit)
+    # button_exit.grid(row=0, column=2)
 
 
 def moonology_page():
