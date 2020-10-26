@@ -1,9 +1,11 @@
-from tkinter import *
+from tkinter import ttk as tk
+from tkinter import PhotoImage
 from files import dictionary, settings as S
 import ttkthemes
 import random
 import datetime
 import os
+import sys
 
 TODAY = str(datetime.datetime.today()).split(' ')[0]
 
@@ -33,23 +35,54 @@ def forget_current():
         place.place_forget()
 
 
+def app_title():
+    def move_window(event):
+        root.geometry(f'+{event.x_root}+{event.y_root}')
+
+    core_frame = tk.Frame(root, relief='ridge', border=1)
+    core_frame.pack(fill='x', expand=True)
+
+    handle_frame = tk.Frame(core_frame, relief='raised')  # recreates the top bar
+    handle_frame.pack(fill='x', expand=True)
+
+    # app_logo = PhotoImage(file='assets/img/logo.gif')
+    # app_logo = app_logo.zoom(8)  # resize the image
+    # app_logo = app_logo.subsample(32)  # resample the image
+    #
+    # handle_frame_logo = tk.Label(handle_frame, image=app_logo, relief='raised')
+    # handle_frame_logo.image = app_logo
+    # handle_frame_logo.pack(side='left', padx=2)
+
+    app_title = tk.Label(handle_frame, text=" App Title   ")
+    app_title.pack(side='left', padx=2)
+
+    close_button = tk.Button(handle_frame, text='X', command=root.destroy)  # creates a button for the top bar to exit
+    close_button.pack(side='right')
+
+    handle_frame.bind('<B1-Motion>', move_window)
+    # handle_frame_logo.bind('<B1-Motion>', move_window)
+    app_title.bind('<B1-Motion>', move_window)
+
+
 def menu():
     forget_current()
+    app_title()
     root.title('')
-    menu_frame = LabelFrame(root, padx=20, pady=20, bg=S.BG_DARK)
+    menu_frame = tk.Frame(root)
     menu_frame.pack(fill='both', expand=True)
-    buttons_frame = LabelFrame(menu_frame, relief='sunken', bg=S.BORDER)
+    buttons_frame = tk.Frame(menu_frame)
     buttons_frame.pack()
-    button_moonology = Button(buttons_frame, width=15, text='Moonology', command=moonology_page, pady=5)
+    button_moonology = tk.Button(buttons_frame, width=15, text='Moonology', command=moonology_page)
     button_moonology.grid(row=0, column=0)
-    button_tarot = Button(buttons_frame, width=15, text='Tarot', command=tarot_page, pady=5)
+    button_tarot = tk.Button(buttons_frame, width=15, text='Tarot', command=tarot_page)
     button_tarot.grid(row=0, column=1)
-    button_exit = Button(buttons_frame, width=15, text='Exit', command=sys.exit, pady=5)
+    button_exit = tk.Button(buttons_frame, width=15, text='Exit', command=sys.exit)
     button_exit.grid(row=0, column=2)
 
 
 def moonology_page():
     forget_current()
+    app_title()
     root.title('Moonology Oracle')
 
     def key_press_enter(event):
@@ -92,26 +125,26 @@ def moonology_page():
         else:
             pass
 
-    name_frame = LabelFrame(root, relief='sunken')
+    name_frame = tk.Frame(root)
     name_frame.pack(fill='x')
 
-    name_label = Label(name_frame, text='Enter your name:', relief='raised')
+    name_label = tk.Label(name_frame, text='Enter your name:')
     name_label.grid(row=0, column=0, sticky='ns')
 
-    name_input = Entry(name_frame, relief='sunken', justify='c', width=45)
+    name_input = tk.Entry(name_frame, justify='c', width=45)
     name_input.grid(row=0, column=1, sticky='ns')
     name_input.focus_set()
 
-    nav_frame = LabelFrame(root)
+    nav_frame = tk.Frame(root)
     nav_frame.pack(fill='x', expand=True)
-    back = Button(name_frame, text='Back', command=menu)
+    back = tk.Button(name_frame, text='Back', command=menu)
     back.grid(row=1, column=0, sticky='we')
-    name_submit = Button(name_frame, text='Pull', command=lambda: pull_card(name_input.get()))
+    name_submit = tk.Button(name_frame, text='Pull', command=lambda: pull_card(name_input.get()))
     name_submit.grid(row=1, column=1, sticky='we')
 
-    card_text_frame = LabelFrame(root, relief='flat')
-    card_text_label = Label(card_text_frame, text='', relief='flat')
-    card_moon_label = Label(card_text_frame, text='', relief='raised')
+    card_text_frame = tk.Frame(root)
+    card_text_label = tk.Label(card_text_frame, text='')
+    card_moon_label = tk.Label(card_text_frame, text='')
 
 
 def tarot_page():
@@ -161,21 +194,21 @@ def tarot_page():
             card_2_num = PhotoImage(file=f'Tarot_Cards/{cards_3[1]}')
             card_3_num = PhotoImage(file=f'Tarot_Cards/{cards_3[2]}')
 
-            card_1_label = Label(card_frame, text='Past', relief='raised')
+            card_1_label = tk.Label(card_frame, text='Past')
             card_1_label.grid(row=0, column=0, sticky='we')
-            card_1 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_3[0], 1), bg=S.BORDER)
+            card_1 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_3[0], 1))
             card_1.image = card_back
             card_1.grid(row=1, column=0)
 
-            card_2_label = Label(card_frame, text='Present', relief='raised')
+            card_2_label = tk.Label(card_frame, text='Present')
             card_2_label.grid(row=0, column=1, sticky='we')
-            card_2 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_3[1], 2), bg=S.BORDER)
+            card_2 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_3[1], 2))
             card_2.image = card_back
             card_2.grid(row=1, column=1)
 
-            card_3_label = Label(card_frame, text='Future', relief='raised')
+            card_3_label = tk.Label(card_frame, text='Future')
             card_3_label.grid(row=0, column=2, sticky='we')
-            card_3 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_3[2], 3), bg=S.BORDER)
+            card_3 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_3[2], 3))
             card_3.image = card_back
             card_3.grid(row=1, column=2)
 
@@ -224,40 +257,36 @@ def tarot_page():
             card_2_num = PhotoImage(file=f'Tarot_Cards/{cards_5[1]}')
             card_3_num = PhotoImage(file=f'Tarot_Cards/{cards_5[2]}')
             card_4_num = PhotoImage(file=f'Tarot_Cards/{cards_5[3]}')
-            card_5_num = PhotoImage(file=f'Tarot_Cards/{cards_5[4]}')
+            photo_image = PhotoImage(file=f'Tarot_Cards/{cards_5[4]}')
+            card_5_num = photo_image
 
-            card_1_label = Label(card_frame, text='Far Past', relief='raised')
+            card_1_label = tk.Label(card_frame, text='Far Past')
             card_1_label.grid(row=0, column=0, sticky='we')
-            card_1 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_5[0], 1),
-                            bg=S.BORDER)
+            card_1 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_5[0], 1))
             card_1.image = card_back
             card_1.grid(row=1, column=0)
 
-            card_2_label = Label(card_frame, text='Past', relief='raised')
+            card_2_label = tk.Label(card_frame, text='Past')
             card_2_label.grid(row=0, column=1, sticky='we')
-            card_2 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_5[1], 2),
-                            bg=S.BORDER)
+            card_2 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_5[1], 2))
             card_2.image = card_back
             card_2.grid(row=1, column=1)
 
-            card_3_label = Label(card_frame, text='Present', relief='raised')
+            card_3_label = tk.Label(card_frame, text='Present')
             card_3_label.grid(row=0, column=2, sticky='we')
-            card_3 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_5[2], 3),
-                            bg=S.BORDER)
+            card_3 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_5[2], 3))
             card_3.image = card_back
             card_3.grid(row=1, column=2)
 
-            card_4_label = Label(card_frame, text='Future', relief='raised')
+            card_4_label = tk.Label(card_frame, text='Future')
             card_4_label.grid(row=0, column=3, sticky='we')
-            card_4 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_5[3], 4),
-                            bg=S.BORDER)
+            card_4 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_5[3], 4))
             card_4.image = card_back
             card_4.grid(row=1, column=3)
 
-            card_5_label = Label(card_frame, text='Far Future', relief='raised')
+            card_5_label = tk.Label(card_frame, text='Far Future')
             card_5_label.grid(row=0, column=4, sticky='we')
-            card_5 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_5[4], 5),
-                            bg=S.BORDER)
+            card_5 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_5[4], 5))
             card_5.image = card_back
             card_5.grid(row=1, column=4)
 
@@ -317,75 +346,70 @@ def tarot_page():
             card_6_num = PhotoImage(file=f'Tarot_Cards/{cards_7[5]}')
             card_7_num = PhotoImage(file=f'Tarot_Cards/{cards_7[6]}')
 
-            card_1 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_7[0], 1),
-                            bg=S.BORDER)
+            card_1 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_7[0], 1))
             card_1.image = card_back
             card_1.grid(row=0, rowspan=2, column=0)
 
-            card_2 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_7[1], 2),
-                            bg=S.BORDER)
+            card_2 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_7[1], 2))
             card_2.image = card_back
             card_2.grid(row=0, column=1)
 
-            card_3 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_7[2], 3),
-                            bg=S.BORDER)
+            card_3 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_7[2], 3))
             card_3.image = card_back
             card_3.grid(row=1, column=1)
 
-            card_4 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_7[3], 4),
-                            bg=S.BORDER)
+            card_4 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_7[3], 4))
             card_4.image = card_back
             card_4.grid(row=0, rowspan=2, column=2)
 
-            card_5 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_7[4], 5),
-                            bg=S.BORDER)
+            card_5 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_7[4], 5))
             card_5.image = card_back
             card_5.grid(row=0, column=3)
 
-            card_6 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_7[5], 6),
-                            bg=S.BORDER)
+            card_6 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_7[5], 6))
             card_6.image = card_back
             card_6.grid(row=1, column=3)
 
-            card_7 = Button(card_frame, image=card_back, relief='raised', command=lambda: card_details(cards_7[6], 7),
-                            bg=S.BORDER)
+            card_7 = tk.Button(card_frame, image=card_back, command=lambda: card_details(cards_7[6], 7))
             card_7.image = card_back
             card_7.grid(row=0, rowspan=2, column=4)
 
             details_label.pack(fill='both', expand=True)
 
     forget_current()
-    name_outer_frame = LabelFrame(root, relief='raised', bg=S.BORDER)
+    app_title()
+
+    name_outer_frame = tk.Frame(root)
     name_outer_frame.pack(fill='both', expand=True)
-    name_frame = LabelFrame(name_outer_frame, relief='sunken', bg=S.BG_DARK)
+    name_frame = tk.LabelFrame(name_outer_frame)
     name_frame.pack()
 
-    name_label = Label(name_frame, text='Enter your name:', relief='raised')
+    name_label = tk.Label(name_frame, text='Enter your name:')
     name_label.grid(row=0, column=0, sticky='ns')
 
-    name_input = Entry(name_frame, relief='sunken', justify='c', width=45)
+    name_input = tk.Entry(name_frame, justify='c', width=45)
     name_input.grid(row=0, column=1, sticky='ns')
     name_input.focus_set()
 
-    back = Button(name_frame, text='Back', command=menu)
+    back = tk.Button(name_frame, text='Back', command=menu)
     back.grid(row=1, column=0, sticky='we')
-    nav_frame = LabelFrame(name_frame, bg=S.BG_LIGHT)
+    nav_frame = tk.Frame(name_frame)
     nav_frame.grid(row=1, column=1)
-    back = Button(name_frame, text='Back', command=menu)
+    back = tk.Button(name_frame, text='Back', command=menu)
     back.grid(row=1, column=0, sticky='we')
-    three_card = Button(nav_frame, text='3-card', command=lambda: three_card_pull(name_input.get()))
+    three_card = tk.Button(nav_frame, text='3-card', command=lambda: three_card_pull(name_input.get()))
     three_card.grid(row=0, column=0, sticky='we')
-    five_card = Button(nav_frame, text='5-card', command=lambda: five_card_pull(name_input.get()))
+    five_card = tk.Button(nav_frame, text='5-card', command=lambda: five_card_pull(name_input.get()))
     five_card.grid(row=0, column=1, sticky='we')
-    seven_card = Button(nav_frame, text='7-card', command=lambda: seven_card_pull(name_input.get()))
+    seven_card = tk.Button(nav_frame, text='7-card', command=lambda: seven_card_pull(name_input.get()))
     seven_card.grid(row=0, column=2, sticky='we')
 
-    card_frame = LabelFrame(root, bg=S.BG_DARK)
+    card_frame = tk.Frame(root)
     card_frame.pack(padx=30)
 
-    details_frame = LabelFrame(root, relief='sunken', bg=S.BG_DARK)
+    details_frame = tk.Frame(root)
     details_frame.pack(fill='both', expand=True)
-    details_label = Label(details_frame, text='Click a card for its details', relief='raised', border=5, bg=S.BG_LIGHT)
+    details_label = tk.Label(details_frame, text='Click a card for its details', border=5)
 
 
 root = ttkthemes.ThemedTk(theme='black')
@@ -394,6 +418,8 @@ root.iconbitmap('files/Moon.ico')
 root.overrideredirect(True)
 root.config(bg=S.BG_DARK)
 root.resizable(0, 0)
+
+
 
 
 del_old()
