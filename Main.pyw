@@ -1,11 +1,11 @@
 from tkinter import ttk as tk
 from tkinter import PhotoImage
-from files import tarot_card_definitions, settings as S
+from files import tarot_card_definitions
 import ttkthemes
 import random
 import datetime
 import os
-import sys
+
 
 TODAY = str(datetime.datetime.today()).split(' ')[0]
 
@@ -118,7 +118,7 @@ def moonology_page():
                 return card_text, card_moon
 
             except FileNotFoundError:
-                with open('files/moonology_.card_definitions.txt') as f:
+                with open('files/moonology_card_definitions.txt') as f:
                     lines = f.readlines()
 
                 with open(f'card_pulls/{TODAY + " M " + name.title()}', 'w') as f:
@@ -451,7 +451,7 @@ root = ttkthemes.ThemedTk(theme='black')
 
 root.iconbitmap('files/app_images/Moon.ico')
 root.overrideredirect(True)
-root.config(bg=S.BG_DARK)
+root.config(bg='#3e3e3e')
 root.resizable(0, 0)
 
 
