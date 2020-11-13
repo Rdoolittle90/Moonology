@@ -20,8 +20,6 @@ def del_old():
         else:
             print(f"{str(file).split(' ')[2]},", end=' ')
     print(TODAY)
-    # with open(f'card_pulls/{TODAY} questions asked', 'w') as qu:
-    #     pass
 
 
 def forget_current():
